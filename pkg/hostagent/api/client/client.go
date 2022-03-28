@@ -62,3 +62,18 @@ func (c *client) Info(ctx context.Context) (*api.Info, error) {
 	}
 	return &info, nil
 }
+
+func (c *client) ReloadMounts(ctx context.Context) (*api.ReloadMounts, error) {
+	u := fmt.Sprintf("http://%s/%s/info", c.dummyHost, c.version)
+	resp, err := httpclientutil.Get(ctx, c.HTTPClient(), u)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	var reloadMounts api.ReloadMounts
+	dec := json.NewDecoder(resp.Body)
+	if err := dec.Decode(&reloadMounts); err != nil {
+		return nil, err
+	}
+	return &reloadMounts, nil
+}

@@ -27,6 +27,14 @@ type Info struct {
 	LocalPorts []IPPort `json:"localPorts"`
 }
 
+type ReloadMounts struct {
+	// LocalPorts contain 127.0.0.1 and 0.0.0.0.
+	// LocalPorts do NOT contain addresses such as 127.0.0.53 and 192.168.5.15.
+	//
+	// In future, LocalPorts will contain IPv6 addresses (::1 and ::) as well.
+	LocalPorts []IPPort `json:"localPorts"`
+}
+
 type Event struct {
 	Time time.Time `json:"time,omitempty"`
 	// The first event contains the full ports as LocalPortsAdded

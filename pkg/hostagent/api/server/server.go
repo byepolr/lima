@@ -46,7 +46,28 @@ func (b *Backend) GetInfo(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(m)
 }
 
+func (b *Backend) ReloadMounts(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+  mounts, err := b.Agent.reloadMounts(ctx)
+	if err != nil {
+		b.onError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+	m, err := json.Marshal(mounts)
+	if err != nil {
+		b.onError(w, r, err, http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(m)
+}
+
 func AddRoutes(r *mux.Router, b *Backend) {
 	v1 := r.PathPrefix("/v1").Subrouter()
 	v1.Path("/info").Methods("GET").HandlerFunc(b.GetInfo)
+	v1.Path("/reload-mounts").Methods("GET").HandlerFunc(b.ReloadMounts)
 }

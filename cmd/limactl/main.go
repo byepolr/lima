@@ -71,6 +71,7 @@ func newApp() *cobra.Command {
 	rootCmd.AddCommand(
 		newStartCommand(),
 		newStopCommand(),
+    newRemountCommand(),
 		newShellCommand(),
 		newCopyCommand(),
 		newListCommand(),

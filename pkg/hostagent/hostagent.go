@@ -319,6 +319,15 @@ func (a *HostAgent) Info(ctx context.Context) (*hostagentapi.Info, error) {
 	return info, nil
 }
 
+func (a *HostAgent) reloadMounts(ctx context.Context) (*hostagentapi.ReloadMounts, error) {
+  fmt.Println("Closing mounts...")
+	for _, m := range a.y.Mounts {
+    fmt.Println(m)
+	}
+  // setupMounts(ctx)
+  return nil, nil
+}
+
 func (a *HostAgent) shutdownQEMU(ctx context.Context, timeout time.Duration, qCmd *exec.Cmd, qWaitCh <-chan error) error {
 	logrus.Info("Shutting down QEMU with ACPI")
 	qmpSockPath := filepath.Join(a.instDir, filenames.QMPSock)
